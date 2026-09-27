@@ -1,0 +1,65 @@
+2026-09-25 16:59:55,726 INFO src.reconcile_dataset: Analysing baseline_all_sources_s30
+2026-09-25 16:59:55,944 INFO src.reconcile_dataset: Analysing grid_w30_s1_drop
+2026-09-25 16:59:56,180 INFO src.reconcile_dataset: Analysing grid_w30_s5_drop
+2026-09-25 16:59:56,401 INFO src.reconcile_dataset: Analysing grid_w30_s10_drop
+2026-09-25 16:59:56,610 INFO src.reconcile_dataset: Analysing grid_w30_s15_drop
+2026-09-25 16:59:56,819 INFO src.reconcile_dataset: Analysing src_training_normal_plus_all_attack
+2026-09-25 16:59:56,875 INFO src.reconcile_dataset: Analysing src_validation_normal_plus_all_attack
+2026-09-25 16:59:57,060 INFO src.reconcile_dataset: Analysing src_family_Adduser_vs_normal
+2026-09-25 16:59:57,235 INFO src.reconcile_dataset: Analysing src_family_Hydra_FTP_vs_normal
+2026-09-25 16:59:57,415 INFO src.reconcile_dataset: Analysing src_family_Hydra_SSH_vs_normal
+2026-09-25 16:59:57,594 INFO src.reconcile_dataset: Analysing src_family_Java_Meterpreter_vs_normal
+2026-09-25 16:59:57,774 INFO src.reconcile_dataset: Analysing src_family_Meterpreter_vs_normal
+2026-09-25 16:59:57,946 INFO src.reconcile_dataset: Analysing src_family_Web_Shell_vs_normal
+2026-09-25 16:59:58,121 INFO src.reconcile_dataset: Analysing len_min30
+2026-09-25 16:59:58,318 INFO src.reconcile_dataset: Analysing len_min60
+2026-09-25 16:59:58,516 INFO src.reconcile_dataset: Analysing len_min90
+2026-09-25 16:59:58,711 INFO src.reconcile_dataset: Analysing len_min120
+2026-09-25 16:59:58,887 INFO src.reconcile_dataset: Analysing vocab_top149_unk
+2026-09-25 16:59:59,113 INFO src.reconcile_dataset: Analysing vocab_top149_drop_windows
+2026-09-25 17:00:01,206 INFO reconciliation: 
+2026-09-25 17:00:01,207 INFO reconciliation: === A. Raw inventory (observed; external counts are references, not ground truth) ===
+2026-09-25 17:00:01,207 INFO reconciliation: Valid traces: 5,951 (normal 5,205, attack 746); blank 0, no valid calls 0, malformed-token files 0, unreadable 0, too short 0, hidden ignored 1
+2026-09-25 17:00:01,207 INFO reconciliation: Paper reference (descriptive only): 52,656 instances, attack share 51.0%, 149 syscalls, 2,805 initial bigrams, 150 selected
+2026-09-25 17:00:01,207 INFO reconciliation: 
+2026-09-25 17:00:01,207 INFO reconciliation: === Scenario summary (EXPLORATORY; distances are descriptive, not objectives) ===
+2026-09-25 17:00:01,207 INFO reconciliation:                                    scenario_id  stride      length_filter                       vocabulary_handling  normal_windows  attack_windows  attack_percentage  unique_syscalls  unique_bigrams  distance_to_paper_total  distance_to_paper_attack_ratio
+                      baseline_all_sources_s30      30               none                                      none           78599           10229            11.5155              171            3678                    36172                          0.3951
+                              grid_w30_s1_drop       1               none                                      none         2279217          295754            11.4857              175            3792                  2522315                          0.3954
+                              grid_w30_s5_drop       5               none                                      none          457710           59453            11.4960              174            3764                   464507                          0.3953
+                             grid_w30_s10_drop      10               none                                      none          230415           29914            11.4908              172            3742                   207673                          0.3954
+                             grid_w30_s15_drop      15               none                                      none          154032           20094            11.5399              172            3728                   121470                          0.3949
+                             grid_w30_s30_drop      30               none                                      none           78599           10229            11.5155              171            3678                    36172                          0.3951
+           src_training_normal_plus_all_attack      30               none                                      none            9884           10229            50.8577              148            2484                    32543                          0.0017
+         src_validation_normal_plus_all_attack      30               none                                      none           68715           10229            12.9573              167            3421                    26288                          0.3807
+src_training_validation_normal_plus_all_attack      30               none                                      none           78599           10229            11.5155              171            3678                    36172                          0.3951
+                  src_family_Adduser_vs_normal      30               none                                      none           78599            1355             1.6947              170            3508                    27298                          0.4933
+                src_family_Hydra_FTP_vs_normal      30               none                                      none           78599            1616             2.0146              170            3554                    27559                          0.4901
+                src_family_Hydra_SSH_vs_normal      30               none                                      none           78599            2326             2.8743              170            3532                    28269                          0.4816
+         src_family_Java_Meterpreter_vs_normal      30               none                                      none           78599            1927             2.3930              171            3545                    27870                          0.4864
+              src_family_Meterpreter_vs_normal      30               none                                      none           78599            1128             1.4148              170            3507                    27071                          0.4961
+                src_family_Web_Shell_vs_normal      30               none                                      none           78599            1877             2.3324              170            3566                    27820                          0.4870
+                                     len_min30      30  min_trace_len>=30                                      none           78599           10229            11.5155              171            3678                    36172                          0.3951
+                                     len_min60      30  min_trace_len>=60                                      none           78599           10229            11.5155              171            3678                    36172                          0.3951
+                                     len_min90      30  min_trace_len>=90                                      none           78481           10207            11.5089              171            3671                    36032                          0.3952
+                                    len_min120      30 min_trace_len>=120                                      none           76585            9871            11.4174              171            3611                    33800                          0.3961
+                              vocab_top149_unk      30               none            top149_train_ids_others_to_UNK           78599           10229            11.5155              149            3638                    36172                          0.3951
+                     vocab_top149_drop_windows      30               none top149_train_ids_drop_windows_with_others           78516           10228            11.5253              148            3555                    36088                          0.3950
+2026-09-25 17:00:01,207 INFO reconciliation: 
+2026-09-25 17:00:01,207 INFO reconciliation: === G. Balance feasibility (no balanced dataset is generated) ===
+2026-09-25 17:00:01,207 INFO reconciliation:                                    scenario_id  attack_windows  balanced_target_per_class  attack_windows_support_target  attack_windows_at_stride_1  largest_stride_reaching_target_attack
+                      baseline_all_sources_s30           10229                      26328                          False                      295754                                     11
+           src_training_normal_plus_all_attack           10229                      26328                          False                      295754                                     11
+         src_validation_normal_plus_all_attack           10229                      26328                          False                      295754                                     11
+src_training_validation_normal_plus_all_attack           10229                      26328                          False                      295754                                     11
+                  src_family_Adduser_vs_normal            1355                      26328                          False                       39294                                      1
+                src_family_Hydra_FTP_vs_normal            1616                      26328                          False                       46035                                      1
+                src_family_Hydra_SSH_vs_normal            2326                      26328                          False                       67255                                      2
+         src_family_Java_Meterpreter_vs_normal            1927                      26328                          False                       55907                                      2
+              src_family_Meterpreter_vs_normal            1128                      26328                          False                       32762                                      1
+                src_family_Web_Shell_vs_normal            1877                      26328                          False                       54501                                      2
+2026-09-25 17:00:01,207 INFO reconciliation: 
+2026-09-25 17:00:01,207 INFO reconciliation: Tables : /tmp/xai_repo/xai-ids-lime-shap-replication/results/tables/reconciliation_*.csv (9 files)
+2026-09-25 17:00:01,207 INFO reconciliation: Figures: /tmp/xai_repo/xai-ids-lime-shap-replication/results/figures/reconciliation_*.png (4 files)
+2026-09-25 17:00:01,207 INFO reconciliation: Log    : /tmp/xai_repo/xai-ids-lime-shap-replication/results/logs/reconciliation.log
+2026-09-25 17:00:01,207 INFO reconciliation: Not written: data/processed, data/artifacts (primary preprocessing artifacts are untouched).

@@ -1,0 +1,6 @@
+scenario_id,window_size,stride,incomplete_policy,total_windows,normal_windows,attack_windows,attack_percentage,contributing_traces_normal,contributing_traces_attack,contributing_traces_total,unique_syscall_ids,unique_bigrams,pct_windows_all_zero_train,pct_windows_all_zero_test,fit_train_windows_used,fit_test_windows_used,fit_subsampled,fit_status,experiment_label
+grid_w30_s1_drop,30,1,drop,2574971,2279217,295754,11.4857,5205,746,5951,175,3792,,,,,False,skipped (fit_features=false),EXPLORATORY reconciliation experiment - not a paper-replication result
+grid_w30_s5_drop,30,5,drop,517163,457710,59453,11.496,5205,746,5951,174,3764,,,,,False,skipped (fit_features=false),EXPLORATORY reconciliation experiment - not a paper-replication result
+grid_w30_s10_drop,30,10,drop,260329,230415,29914,11.4908,5205,746,5951,172,3742,,,,,False,skipped (fit_features=false),EXPLORATORY reconciliation experiment - not a paper-replication result
+grid_w30_s15_drop,30,15,drop,174126,154032,20094,11.5399,5205,746,5951,172,3728,,,,,False,skipped (fit_features=false),EXPLORATORY reconciliation experiment - not a paper-replication result
+grid_w30_s30_drop,30,30,drop,88828,78599,10229,11.5155,5205,746,5951,171,3678,,,,,False,skipped (fit_features=false),EXPLORATORY reconciliation experiment - not a paper-replication result

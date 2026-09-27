@@ -1,0 +1,54 @@
+{
+  "data": {
+    "stride": 30,
+    "tail_policy": "drop",
+    "window_size": 30
+  },
+  "features": {
+    "fit_on": "train_only",
+    "k_best": 150,
+    "ngram_range": [
+      2,
+      2
+    ],
+    "score_func": "chi2",
+    "tfidf_lowercase": false,
+    "tfidf_token_pattern": "\\S+"
+  },
+  "model": {
+    "architecture": "150 input -> 64 ReLU -> 32 ReLU -> 1 logistic output",
+    "batch_size": 256,
+    "class_weight": null,
+    "classification_loss": "log_loss",
+    "decision_threshold": 0.5,
+    "early_stopping": true,
+    "final_training_loss": 0.11237058708168257,
+    "framework": "scikit-learn MLPClassifier",
+    "hidden_activation": "relu",
+    "hidden_layer_sizes": [
+      64,
+      32
+    ],
+    "learning_rate_init": 0.001,
+    "max_iter": 100,
+    "n_iter_actual": 21,
+    "n_iter_no_change": 10,
+    "output_activation": "logistic (binary MLPClassifier output)",
+    "parameter_status": "independent reconstruction default for unspecified architecture/training hyperparameters",
+    "random_state": 42,
+    "resampling": null,
+    "sample_weight": null,
+    "solver": "adam",
+    "validation_fraction": 0.1
+  },
+  "split": {
+    "group_by": "trace",
+    "seed": 42,
+    "stratify": true,
+    "test_frac": 0.15,
+    "test_size": 0.15,
+    "train_frac": 0.7,
+    "val_frac": 0.15,
+    "validation_size": 0.15
+  }
+}

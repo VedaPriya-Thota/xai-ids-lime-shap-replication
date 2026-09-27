@@ -1,0 +1,52 @@
+# Raw datasets and downloaded archives — never commit these.
+data/raw/
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.gz
+*.bz2
+*.7z
+
+# Python environments and caches.
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# OS/editor files.
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Temporary/local files.
+tmp/
+tmp_*/
+temp/
+temp_*/
+*.tmp
+*.swp
+*.swo
+
+# Local model/data caches. Frozen repository artifacts are not ignored.
+.cache/
+model_cache/
+models_cache/
+huggingface_cache/
+transformers_cache/
+
+# Local-only logs. Required reproducibility/result logs should be force-added if tracked.
+*.local.log
+
+# Keep the frozen processed manifest and reproducibility artifacts tracked.
+# Do not add a broad data/processed/ ignore rule.

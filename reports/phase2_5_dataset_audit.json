@@ -1,0 +1,147 @@
+{
+  "command": "python scripts/run_reconciliation.py --config configs/baseline.yaml --raw-data-dir /tmp/adfa/ADFA-LD --no-fit",
+  "configuration": {
+    "attack_directory": "Attack_Data_Master",
+    "class_balancing": "none",
+    "class_weights": false,
+    "normal_directories": [
+      "Training_Data_Master",
+      "Validation_Data_Master"
+    ],
+    "resampling": false,
+    "seed": 42,
+    "split_policy": "trace-disjoint stratified split",
+    "stride": 30,
+    "tail_policy": "drop",
+    "test_fraction": 0.15,
+    "train_fraction": 0.7,
+    "validation_fraction": 0.15,
+    "window_size": 30
+  },
+  "generated_at_utc": "2026-09-25T17:00:51.519460+00:00",
+  "integrity_checks": {
+    "baseline_total_windows": 88828,
+    "duplicate_trace_start_windows": 0,
+    "manifest_matches_baseline_window_count": true,
+    "manifest_rows": 5951,
+    "manifest_window_sum": 88828,
+    "raw_data_read_only": true,
+    "split_window_sum_matches_baseline": true,
+    "trace_id_overlap_across_splits": 0
+  },
+  "inventory": {
+    "attack_traces": 746,
+    "blank_files": 0,
+    "hidden_files_ignored": 1,
+    "malformed_token_files": 0,
+    "no_valid_calls": 0,
+    "normal_traces": 5205,
+    "syscall_vocab_count": 175,
+    "syscall_vocab_max": 340,
+    "syscall_vocab_min": 1,
+    "too_short_files": 0,
+    "total_txt_files": 5951,
+    "unreadable_files": 0,
+    "valid_traces": 5951
+  },
+  "limitations": [
+    "The authors generated 52,656-instance dataset and exact preprocessing/split artifacts were not recovered.",
+    "This public raw mirror yields 88,828 non-overlapping windows under the frozen reconstruction.",
+    "The raw mirror yields 175 observed syscall IDs versus 149 reported in the paper.",
+    "Paper class supports are derived from the reported confusion matrix.",
+    "This audit does not train a model and does not fit TF-IDF or chi-squared features."
+  ],
+  "paper_reference": {
+    "attack_instances": {
+      "derivation": "TP + FN",
+      "status": "derived",
+      "value": 26870
+    },
+    "distinct_syscalls": {
+      "status": "reported",
+      "value": 149
+    },
+    "initial_bigrams": {
+      "status": "reported",
+      "value": 2805
+    },
+    "normal_instances": {
+      "derivation": "TN + FP",
+      "status": "derived",
+      "value": 25786
+    },
+    "selected_features": {
+      "status": "reported",
+      "value": 150
+    },
+    "total_instances": {
+      "status": "reported",
+      "value": 52656
+    }
+  },
+  "reconciliation": {
+    "baseline_attack_ratio_distance": 0.39513822394408993,
+    "baseline_total_distance": 36172
+  },
+  "result_type": "independent reconstruction, not the exact paper dataset",
+  "source": {
+    "hidden_files_ignored": 1,
+    "kind": "public raw ADFA-LD mirror",
+    "project_relative_config_path": "/tmp/adfa/ADFA-LD",
+    "raw_tree_sha256": "38454c054b5d50a082d52dca2e3b0c1bdafad8dafaf43085b42b966967383a13",
+    "resolved_root": "/tmp/adfa/ADFA-LD"
+  },
+  "splits": {
+    "assignment_hashes_sha256": {
+      "test": "da18c4b47c6876a175ab8cf7496965b1d17a75fcbc5827b8d274dcb237e9198f",
+      "train": "680cc139c5ab31ff77b284d6c8a6353c1ae146d3a37fc0b3c3c0e727c0818ffa",
+      "validation": "aba42a723bed4542d3948d1c94efaf4096b1482759327187323d2b9fd17b8705"
+    },
+    "trace_counts": {
+      "test": {
+        "attack_traces": 112,
+        "normal_traces": 781,
+        "total_traces": 893
+      },
+      "train": {
+        "attack_traces": 522,
+        "normal_traces": 3643,
+        "total_traces": 4165
+      },
+      "validation": {
+        "attack_traces": 112,
+        "normal_traces": 781,
+        "total_traces": 893
+      }
+    },
+    "window_counts": {
+      "test": {
+        "attack_percentage": 11.8157,
+        "attack_windows": 1623,
+        "normal_windows": 12113,
+        "total_windows": 13736
+      },
+      "train": {
+        "attack_percentage": 11.1806,
+        "attack_windows": 6882,
+        "normal_windows": 54671,
+        "total_windows": 61553
+      },
+      "validation": {
+        "attack_percentage": 12.7336,
+        "attack_windows": 1724,
+        "normal_windows": 11815,
+        "total_windows": 13539
+      }
+    }
+  },
+  "windowing": {
+    "attack_percentage": 11.5155,
+    "attack_windows": 10229,
+    "normal_windows": 78599,
+    "stride": 30,
+    "tail_policy": "drop incomplete tails",
+    "total_windows": 88828,
+    "window_size": 30
+  }
+}

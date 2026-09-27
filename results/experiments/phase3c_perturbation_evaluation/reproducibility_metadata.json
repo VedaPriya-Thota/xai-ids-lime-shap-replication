@@ -1,0 +1,56 @@
+{
+  "balancing": false,
+  "explainer_fit": false,
+  "generated_at_utc": "2026-09-25T17:48:03.284470+00:00",
+  "limitations": [
+    "sampled 20 test instances only",
+    "vendored LIME-compatible implementation from Phase 3B",
+    "perturbations are model-input interventions, not causal claims"
+  ],
+  "methods": [
+    "lime_compatible",
+    "shap_kernel"
+  ],
+  "model_fit": false,
+  "phase": "3C",
+  "preprocessing_fit": false,
+  "protected_hashes_after": {
+    "audit": "b041ba5a2127f6011bdf167f800eeca28186748b280d1e373d0ef2ee120a7ee9",
+    "audit_md": "b252498da507055ca7bdd6369f9fd71e21abc8103e5b53430ba1603fa4f95e88",
+    "baseline_config": "07e7d3a6187a0781bb831f4baeb22802dacd926c0dbd1f0ea1608479bc956285",
+    "feature_names": "d00d1eff56dd01fb71ffe5c27727e62f563c4a9d8d9e4f2f4bbde906d1311858",
+    "lime": "bce7a8c104719e167d723a814aa7edb5934f5ca9e78c7fe76dcb4f0fed6e39a7",
+    "manifest": "765289887ac57f0a7f08b0d2761c9507e65f8ff98805ab69dc08a6cc312bf4f1",
+    "model": "c0519bb73192403ca624a760da5dcec3f087bb8af6dd54ca7b05d6cd13b16674",
+    "p3b_metadata": "6f80e6eca87ec867f5c05034213f787a83a9c1771d8aa4ff1728368ff0bcb35e",
+    "selected_instances": "0aa44e79b639fe00101571d7253f737c1d51c5829293bd115b206b342440b6ba",
+    "selector": "820605c5b8abd170a6cf90f36729ce2b6caf5c7a036050d0ab8ce60a513f2cae",
+    "shap": "5bd51615b303d2c427f1f8aa7ea6de1119035ca1681f4f6aee7653a0455d05b3",
+    "test_predictions": "d46ee4ad62ef0660a8db1029ba8ad68a6c35253fa14bc23fa1904fb01badc537",
+    "vectorizer": "ac0554f3128cf400d40e6814e6b37ef2df7e84732206c76634644f9496e4cf5a"
+  },
+  "protected_hashes_before": {
+    "audit": "b041ba5a2127f6011bdf167f800eeca28186748b280d1e373d0ef2ee120a7ee9",
+    "audit_md": "b252498da507055ca7bdd6369f9fd71e21abc8103e5b53430ba1603fa4f95e88",
+    "baseline_config": "07e7d3a6187a0781bb831f4baeb22802dacd926c0dbd1f0ea1608479bc956285",
+    "feature_names": "d00d1eff56dd01fb71ffe5c27727e62f563c4a9d8d9e4f2f4bbde906d1311858",
+    "lime": "bce7a8c104719e167d723a814aa7edb5934f5ca9e78c7fe76dcb4f0fed6e39a7",
+    "manifest": "765289887ac57f0a7f08b0d2761c9507e65f8ff98805ab69dc08a6cc312bf4f1",
+    "model": "c0519bb73192403ca624a760da5dcec3f087bb8af6dd54ca7b05d6cd13b16674",
+    "p3b_metadata": "6f80e6eca87ec867f5c05034213f787a83a9c1771d8aa4ff1728368ff0bcb35e",
+    "selected_instances": "0aa44e79b639fe00101571d7253f737c1d51c5829293bd115b206b342440b6ba",
+    "selector": "820605c5b8abd170a6cf90f36729ce2b6caf5c7a036050d0ab8ce60a513f2cae",
+    "shap": "5bd51615b303d2c427f1f8aa7ea6de1119035ca1681f4f6aee7653a0455d05b3",
+    "test_predictions": "d46ee4ad62ef0660a8db1029ba8ad68a6c35253fa14bc23fa1904fb01badc537",
+    "vectorizer": "ac0554f3128cf400d40e6814e6b37ef2df7e84732206c76634644f9496e4cf5a"
+  },
+  "raw_data_modified": false,
+  "seed": 42,
+  "software": {
+    "joblib": "1.5.3",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "python": "3.13.5"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "generated_at_utc": "2026-09-25T17:35:14.255007+00:00",
+  "leakage_checks": {
+    "background_train_only": true,
+    "balancing_used": false,
+    "lime_training_data_train_only": true,
+    "model_fit_performed": false,
+    "raw_sequences_in_outputs": false,
+    "test_labels_used_for_fitting": false,
+    "transformer_fit_performed": false,
+    "validation_used_for_fitting": false
+  },
+  "lime": {
+    "class_names": [
+      "normal",
+      "attack"
+    ],
+    "discretize_continuous": false,
+    "explained_class": "attack_probability",
+    "kernel_width": "library/default compatibility value",
+    "method": "lime.lime_tabular.LimeTabularExplainer",
+    "num_features": 10,
+    "num_samples": 5000,
+    "random_state": 42,
+    "training_data": "full transformed TRAIN matrix (61,553 x 150)"
+  },
+  "manifest_sha256": "765289887ac57f0a7f08b0d2761c9507e65f8ff98805ab69dc08a6cc312bf4f1",
+  "paper_doi": "10.1109/ACCESS.2024.3368377",
+  "phase": "3B",
+  "protected_input_hashes": {
+    "audit": "b041ba5a2127f6011bdf167f800eeca28186748b280d1e373d0ef2ee120a7ee9",
+    "config": "07e7d3a6187a0781bb831f4baeb22802dacd926c0dbd1f0ea1608479bc956285",
+    "feature_names": "d00d1eff56dd01fb71ffe5c27727e62f563c4a9d8d9e4f2f4bbde906d1311858",
+    "manifest": "765289887ac57f0a7f08b0d2761c9507e65f8ff98805ab69dc08a6cc312bf4f1",
+    "model": "c0519bb73192403ca624a760da5dcec3f087bb8af6dd54ca7b05d6cd13b16674",
+    "selector": "820605c5b8abd170a6cf90f36729ce2b6caf5c7a036050d0ab8ce60a513f2cae",
+    "test_predictions": "d46ee4ad62ef0660a8db1029ba8ad68a6c35253fa14bc23fa1904fb01badc537",
+    "vectorizer": "ac0554f3128cf400d40e6814e6b37ef2df7e84732206c76634644f9496e4cf5a"
+  },
+  "raw_data_modified": false,
+  "raw_source_dir": "/tmp/p3b_data/ADFA-LD",
+  "seed": 42,
+  "selection": {
+    "groups": [
+      "TP",
+      "FN",
+      "TN",
+      "FP"
+    ],
+    "n_per_group": 5,
+    "random_seed": 42,
+    "rule": "random sample from each frozen outcome group",
+    "total": 20
+  },
+  "shap": {
+    "background_attack": 50,
+    "background_normal": 50,
+    "background_seed": 42,
+    "background_total": 100,
+    "expected_value_attack": 0.3618826159800598,
+    "l1_reg": "num_features(150)",
+    "method": "KernelExplainer",
+    "nsamples": 512
+  },
+  "software": {
+    "joblib": "1.5.3",
+    "lime": "vendored-compat-0.2.0.1",
+    "matplotlib": "3.10.8",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "python": "3.13.5",
+    "scikit_learn": "1.8.0",
+    "shap": "0.50.0"
+  },
+  "split_assignment_sha256": "5c2b0745cccde2c060ce139fe92e383510ab4237eb0d53b64b9c5f29024e04ba",
+  "status": "sampled XAI reconstruction; not all test instances explained"
+}

@@ -1,0 +1,3 @@
+method,n_instances,actionable_cases,mean_actionable_feature_rate,mean_actionable_edits,mean_abs_guided_delta,mean_abs_random_delta,guided_label_flips,random_label_flips
+lime_compatible,20,15,0.125,4.6,0.23492634934227646,0.15668953267105495,9,6
+shap_kernel,20,20,0.32,11.25,0.3520116445080489,0.3009721190402094,9,8

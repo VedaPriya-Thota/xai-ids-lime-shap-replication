@@ -1,0 +1,105 @@
+{
+  "class_distribution_by_split": {
+    "test": {
+      "attack": 1623,
+      "normal": 12113,
+      "total": 13736
+    },
+    "train": {
+      "attack": 6882,
+      "normal": 54671,
+      "total": 61553
+    },
+    "validation": {
+      "attack": 1724,
+      "normal": 11815,
+      "total": 13539
+    }
+  },
+  "config_path": "configs/baseline.yaml",
+  "experiment": "phase3a_strict_reconstructed_mlp",
+  "feature_pipeline": {
+    "chi2_fit_split": "train_only",
+    "ngram_order": 2,
+    "requested_k": 150,
+    "selected_k": 150,
+    "tfidf_fit_split": "train_only",
+    "token_form": "callA_callB",
+    "vectorizer": {
+      "lowercase": false,
+      "norm": "l2",
+      "use_idf": true
+    }
+  },
+  "generated_at_utc": "2026-09-25T17:21:55.361120+00:00",
+  "leakage_checks": {
+    "chi2_fit_on_test": false,
+    "chi2_fit_on_validation": false,
+    "class_weight_used": false,
+    "resampling_used": false,
+    "test_labels_used_for_fit": false,
+    "test_metrics_used_for_selection": false,
+    "tfidf_fit_on_test": false,
+    "tfidf_fit_on_validation": false,
+    "trace_disjoint": true,
+    "validation_labels_used_for_fit": false
+  },
+  "manifest_path": "data/processed/trace_manifest.csv",
+  "manifest_sha256": "765289887ac57f0a7f08b0d2761c9507e65f8ff98805ab69dc08a6cc312bf4f1",
+  "model": {
+    "architecture": "150 input -> 64 ReLU -> 32 ReLU -> 1 logistic output",
+    "batch_size": 256,
+    "class_weight": null,
+    "classification_loss": "log_loss",
+    "decision_threshold": 0.5,
+    "early_stopping": true,
+    "final_training_loss": 0.11237058708168257,
+    "framework": "scikit-learn MLPClassifier",
+    "hidden_activation": "relu",
+    "hidden_layer_sizes": [
+      64,
+      32
+    ],
+    "learning_rate_init": 0.001,
+    "max_iter": 100,
+    "n_iter_actual": 21,
+    "n_iter_no_change": 10,
+    "output_activation": "logistic (binary MLPClassifier output)",
+    "parameter_status": "independent reconstruction default for unspecified architecture/training hyperparameters",
+    "random_state": 42,
+    "resampling": null,
+    "sample_weight": null,
+    "solver": "adam",
+    "validation_fraction": 0.1
+  },
+  "paper_doi": "10.1109/ACCESS.2024.3368377",
+  "random_seeds": {
+    "global": 42,
+    "model_random_state": 42,
+    "numpy": 42,
+    "python": 42
+  },
+  "raw_data_modified": false,
+  "raw_source_dir": "external runtime raw ADFA-LD path (not stored in repository)",
+  "raw_source_dir_configured": "data/raw/ADFA-LD",
+  "software": {
+    "joblib": "1.5.3",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "python": "3.13.5",
+    "scikit_learn": "1.8.0"
+  },
+  "split_assignment_sha256": "5c2b0745cccde2c060ce139fe92e383510ab4237eb0d53b64b9c5f29024e04ba",
+  "split_policy": {
+    "method": "trace-disjoint stratified split",
+    "seed": 42,
+    "test_fraction": 0.15,
+    "validation_fraction": 0.15
+  },
+  "status": "strict reconstructed ADFA-LD baseline, not the authors' exact 52,656-instance dataset",
+  "window_policy": {
+    "stride": 30,
+    "tail_policy": "drop",
+    "window_size": 30
+  }
+}

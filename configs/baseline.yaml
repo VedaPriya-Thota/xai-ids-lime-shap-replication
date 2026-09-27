@@ -1,0 +1,96 @@
+# Baseline configuration for the independent replication.
+# Every value is tagged:
+#   [paper]      -> stated in the paper pages we read
+#   [assumption] -> NOT stated in those pages; our choice (see ASSUMPTIONS.md)
+# Do not read an [assumption] value as the authors' setting.
+
+seed: 42                      # [assumption] paper reports no seed
+
+paths:
+  raw_data_dir: data/raw/ADFA-LD
+  processed_dir: data/processed
+  artifacts_dir: data/artifacts
+  results_dir: results
+
+data:
+  window_size: 30             # [paper] each instance = 30 system calls
+  stride: 30                  # [assumption] non-overlapping windows
+  short_trace_policy: drop    # [assumption] traces < window_size are dropped and counted (alternative: pad)
+  normal_dirs: [Training_Data_Master, Validation_Data_Master]   # [assumption] labelled normal
+  attack_dirs: [Attack_Data_Master]                             # [assumption] labelled attack
+  label_map: {normal: 0, attack: 1}                             # [paper] 0 = normal, 1 = anomaly
+  # Class balancing: none initially. [assumption] Paper does not state any resampling.
+
+features:
+  ngram_range: [2, 2]         # [paper] bigrams
+  tfidf_lowercase: false      # [assumption] tokens are numeric syscall IDs
+  tfidf_token_pattern: '\S+'  # [assumption] whitespace-separated syscall IDs
+  score_func: chi2            # [paper] chi-squared test
+  k_best: 150                 # [paper] 150 final features (paper starts from 2,805 bigrams)
+  fit_on: train_only          # [assumption, required to avoid leakage]
+
+split:
+  train_frac: 0.70            # [assumption] paper split not found in pages read
+  val_frac: 0.15
+  test_frac: 0.15
+  stratify: true
+  group_by: trace             # [assumption] trace-disjoint stratified split; every trace stays in one partition.
+                              # Active Phase 2.6 baseline: trace-disjoint stratified split, seed 42,
+                              # 15% validation, 15% test, 30-call non-overlapping windows, stride 30,
+                              # incomplete tails dropped.
+
+model:
+  input_dim: 150              # [paper]
+  hidden_units: [128, 64]     # [assumption] paper: 2 ReLU dense layers, widths not found
+  hidden_activation: relu     # [paper]
+  output_units: 1             # [paper] binary
+  output_activation: sigmoid  # [paper]
+  decision_threshold: 0.5     # [assumption]
+
+training:
+  optimizer: adam             # [assumption]
+  learning_rate: 0.001        # [assumption]
+  loss: binary_crossentropy   # [assumption] (natural choice for sigmoid output)
+  batch_size: 128             # [assumption]
+  max_epochs: 100             # [assumption] upper limit only
+  early_stopping:
+    monitor: val_loss         # [assumption]
+    patience: 10
+    restore_best_weights: true
+
+lime:
+  explainer: LimeTabularExplainer   # [paper]
+  num_features: 10                  # [paper] top-10 features per instance
+  num_samples: 5000                 # [assumption]
+  random_state: 42                  # [assumption]
+  kernel_width: null                # [assumption] library default
+  discretize_continuous: false      # [assumption] library default is true; TF-IDF columns are mostly zero, so
+                                    # quartile bins may degenerate. Verify in Phase 4.
+
+shap:
+  explainer: KernelExplainer        # [paper]
+  num_features: 10                  # [paper] top-10 features per instance
+  background_size: 50               # [assumption] KernelExplainer cost grows with background size
+  background_method: random         # [assumption] random | kmeans
+  nsamples: auto                    # [assumption] library default
+  random_seed: 42                   # [assumption]
+  explained_output: attack_probability   # [assumption]
+
+explain_instances:
+  selection_rule: first_in_test_order    # [assumption] deterministic
+  groups: [TP, TN, FN, FP]               # FN/FP only if they exist in the test set
+
+perturbation:
+  stage_a:
+    top_k_values: [1, 3]                 # [assumption] simple version of the paper idea
+    random_baseline: true
+    random_from: non_top_features        # [assumption]
+    random_seed: 42
+  stage_b:
+    top_k: 10                            # [paper] top-10 removal
+    groups: [TP, TN, FP, FN]             # [paper]
+  stage_c:
+    enabled: false                       # stretch goal, only after A and B work
+  removal_value: 0.0                     # [assumption] "removing" a TF-IDF bigram = setting its column to 0
+  renormalize_after_removal: false       # [assumption] rows are NOT re-L2-normalised after zeroing
+  rank_by: abs_weight                    # [assumption]

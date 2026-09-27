@@ -1,0 +1,32 @@
+# Phase 2.5 dataset-reconciliation settings. EXPLORATORY diagnostics only, not paper-replication results.
+# The primary baseline (configs/baseline.yaml) is read but never modified by the reconciliation script.
+
+window_size: 30                         # [paper] 30 calls per instance
+strides: [1, 5, 10, 15, 30]             # diagnostic grid; only stride 30 is the (non-overlapping) baseline
+incomplete_policies: [drop]             # only 'drop' is implemented
+min_trace_length_thresholds: [30, 60, 90, 120]   # trace-length filters, applied in memory only (nothing is deleted)
+low_frequency_threshold: 100            # a syscall ID with fewer total calls than this is flagged 'low frequency'
+top_k_syscalls: 149                     # diagnostic vocabulary size taken from the paper (149 distinct syscalls)
+unk_token_id: 100000                    # numeric token used for excluded IDs in the 'UNK' diagnostic
+
+source_groups:                          # names of the raw folders used by the source-group scenarios
+  training: Training_Data_Master
+  validation: Validation_Data_Master
+
+zero_check:
+  max_windows_per_partition: 100000     # windows above this are sampled (seed 42) before the train-only TF-IDF/chi2 fit
+  fit_features: true                    # false = skip TF-IDF/chi2 fits (fast, leaves those columns empty)
+
+paper_reference:                        # values reported by / derived from the paper (descriptive distances only)
+  total_instances: 52656
+  attack_instances: 26870               # derived from confusion-matrix text: TP + FN
+  normal_instances: 25786               # derived from confusion-matrix text: TN + FP
+  distinct_syscalls: 149
+  initial_bigrams: 2805
+  selected_features: 150
+
+external_reference_counts:              # counts commonly quoted in ADFA-LD documentation; NOT treated as ground truth
+  Training_Data_Master: 833
+  Validation_Data_Master: 4372
+  Attack_Data_Master: 746
+  total: 5951

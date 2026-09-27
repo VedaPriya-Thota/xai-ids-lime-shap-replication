@@ -1,0 +1,7 @@
+{
+  "seed": 42,
+  "policy": "top-10 bigram raw-position intervention; second syscall replaced; one edit per raw position; matched random count",
+  "window_size": 30,
+  "vectorization": "frozen TF-IDF + frozen chi2 selector",
+  "threshold": 0.5
+}

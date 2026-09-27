@@ -1,0 +1,22 @@
+scenario_id,raw_observed_bigrams,tfidf_train_vocab_size,chi2_requested,chi2_selected_features,paper_initial_bigrams,tfidf_vocab_minus_paper_initial,paper_selected_features,pct_windows_all_zero_train,pct_windows_all_zero_test,fit_train_windows_used,fit_subsampled,fit_status,selected_bigram_names,experiment_label
+baseline_all_sources_s30,3678,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+grid_w30_s1_drop,3792,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+grid_w30_s5_drop,3764,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+grid_w30_s10_drop,3742,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+grid_w30_s15_drop,3728,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+grid_w30_s30_drop,3678,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+src_training_normal_plus_all_attack,2484,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+src_validation_normal_plus_all_attack,3421,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+src_training_validation_normal_plus_all_attack,3678,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+src_family_Adduser_vs_normal,3508,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+src_family_Hydra_FTP_vs_normal,3554,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+src_family_Hydra_SSH_vs_normal,3532,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+src_family_Java_Meterpreter_vs_normal,3545,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+src_family_Meterpreter_vs_normal,3507,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+src_family_Web_Shell_vs_normal,3566,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+len_min30,3678,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+len_min60,3678,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+len_min90,3671,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+len_min120,3611,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+vocab_top149_unk,3638,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result
+vocab_top149_drop_windows,3555,,150,,2805,,150,,,,False,skipped (fit_features=false),,EXPLORATORY reconciliation experiment - not a paper-replication result

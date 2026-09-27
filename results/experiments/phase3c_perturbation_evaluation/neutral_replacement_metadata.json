@@ -1,0 +1,7 @@
+{
+  "default_most_frequent_id": 3,
+  "default_training_frequency": 229341,
+  "derivation": "highest-frequency syscall ID across TRAIN-only NORMAL 30-call windows; candidates exclude the original syscall and any candidate that recreates the target pair at the edited position",
+  "training_normal_call_count": 1640130,
+  "unique_ids": 167
+}

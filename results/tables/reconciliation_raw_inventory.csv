@@ -1,0 +1,12 @@
+source_group,attack_family,n_txt_files,n_valid_traces,n_blank_files,n_no_valid_calls,n_files_with_malformed_tokens,n_unreadable,n_too_short_for_window,n_hidden_files_ignored,n_non_txt_files_ignored,total_calls,min_len,q25_len,median_len,q75_len,max_len,external_reference_count,observed_minus_reference,note
+Training_Data_Master,,833,833,0,0,0,0,0,0,0,308077,79,131.0,201.0,410.0,2948,833.0,0.0,
+Validation_Data_Master,,4372,4372,0,0,0,0,0,1,0,2122085,77,162.75,343.0,452.0,4494,4372.0,0.0,
+Attack_Data_Master,Adduser,91,91,0,0,0,0,0,0,0,41933,75,223.0,410.0,575.0,2620,,,
+Attack_Data_Master,Hydra_FTP,162,162,0,0,0,0,0,0,0,50733,94,133.5,195.5,381.0,1350,,,
+Attack_Data_Master,Hydra_SSH,176,176,0,0,0,0,0,0,0,72359,85,115.75,159.5,436.0,2712,,,
+Attack_Data_Master,Java_Meterpreter,124,124,0,0,0,0,0,0,0,59503,78,272.0,390.0,678.75,1283,,,
+Attack_Data_Master,Meterpreter,75,75,0,0,0,0,0,0,0,34937,85,160.5,322.0,698.5,1348,,,
+Attack_Data_Master,Web_Shell,118,118,0,0,0,0,0,0,0,57923,77,128.75,309.5,698.5,2161,,,
+SUBTOTAL_NORMAL,,5205,5205,0,0,0,0,0,1,0,2430162,77,152.0,343.0,444.0,4494,5205.0,0.0,
+SUBTOTAL_ATTACK,,746,746,0,0,0,0,0,0,0,317388,75,139.0,290.0,560.75,2712,746.0,0.0,
+TOTAL,,5951,5951,0,0,0,0,0,1,0,2747550,75,151.0,343.0,460.5,4494,5951.0,0.0,External reference counts are quoted from published ADFA-LD documentation and are NOT treated as ground truth.

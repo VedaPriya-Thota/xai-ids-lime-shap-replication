@@ -1,0 +1,6 @@
+scenario_id,min_trace_len,window_size,stride,traces_excluded_normal,traces_excluded_attack,normal_windows,attack_windows,total_windows,attack_percentage,unique_syscalls,unique_bigrams,partial_trailing_windows_dropped,dropped_trailing_calls,experiment_label
+baseline_all_sources_s30,0,30,30,0,0,78599,10229,88828,11.5155,171,3678,5811,82710,EXPLORATORY reconciliation experiment - not a paper-replication result
+len_min30,30,30,30,0,0,78599,10229,88828,11.5155,171,3678,5811,82710,EXPLORATORY reconciliation experiment - not a paper-replication result
+len_min60,60,30,30,0,0,78599,10229,88828,11.5155,171,3678,5811,82710,EXPLORATORY reconciliation experiment - not a paper-replication result
+len_min90,90,30,30,59,11,78481,10207,88688,11.5089,171,3671,5741,81024,EXPLORATORY reconciliation experiment - not a paper-replication result
+len_min120,120,30,30,691,123,76585,9871,86456,11.4174,171,3611,5005,70134,EXPLORATORY reconciliation experiment - not a paper-replication result
