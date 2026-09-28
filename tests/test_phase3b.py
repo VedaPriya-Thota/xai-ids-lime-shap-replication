@@ -1,8 +1,10 @@
 from pathlib import Path
 import hashlib
+import shutil
 import pandas as pd
 import numpy as np
-from src.phase3b import EXPECTED_MANIFEST_SHA, EXPECTED_ASSIGNMENT_SHA, select_instances, sha256_file
+from src.phase3b import EXPECTED_MANIFEST_SHA, EXPECTED_ASSIGNMENT_SHA, select_instances, sha256_file, verify_frozen_inputs
+from src.config import load_config
 
 ROOT=Path(__file__).resolve().parents[1]
 P3A=ROOT/'results/experiments/phase3a_strict_reconstructed_mlp'
@@ -35,3 +37,54 @@ def test_no_raw_syscall_columns_in_phase3b_tables_if_present():
     for p in out.glob('*.csv'):
         cols=set(pd.read_csv(p,nrows=0).columns)
         assert not forbidden & cols
+
+
+def test_verify_frozen_inputs_accepts_explicit_non_default_phase3a_dir(tmp_path):
+    """Phase 3B must be able to load a Phase 3A artifact set from an arbitrary directory, not only
+    the historical frozen path. This is the behavior that lets a freshly regenerated Phase 3A run
+    (produced under the repository's documented environment, and therefore guaranteed to unpickle
+    correctly in that same environment) feed Phase 3B directly, instead of Phase 3B being hard-wired
+    to a single historical directory whose serialized artifacts may predate the documented
+    environment's package versions.
+
+    The artifacts here are freshly fit under the current environment (not copies of the historical
+    frozen pickle) so this test exercises the actual reproducibility fix rather than depending on
+    whether the historical pickle happens to be loadable in whatever environment runs the suite.
+    """
+    import joblib
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.feature_selection import SelectKBest, chi2
+    from sklearn.neural_network import MLPClassifier
+
+    custom_p3a = tmp_path / "phase3a_rerun"
+    (custom_p3a / "preprocessing").mkdir(parents=True)
+
+    # Reuse the real frozen selection/prediction *data* (not code-version-dependent pickles): the
+    # feature-name table and the test-set predictions must match EXPECTED_CM for verification to
+    # pass, exactly as a genuine same-methodology Phase 3A rerun would reproduce.
+    shutil.copy(P3A / "preprocessing" / "selected_feature_names.csv", custom_p3a / "preprocessing" / "selected_feature_names.csv")
+    shutil.copy(P3A / "test_predictions.csv", custom_p3a / "test_predictions.csv")
+
+    # Freshly fit (under the current environment) placeholder vectorizer/selector/model with the
+    # required shape (150 selected features), standing in for a real Phase 3A rerun's artifacts.
+    docs = [" ".join(f"{i}_{i+1}" for i in range(1, 200)) for _ in range(8)]
+    y = np.array([0, 1] * 4)
+    vec = TfidfVectorizer(ngram_range=(1, 1), token_pattern=r"[^\s]+", lowercase=False, norm="l2", use_idf=True)
+    x = vec.fit_transform(docs)
+    selector = SelectKBest(chi2, k=150)
+    x_sel = selector.fit_transform(x, y)
+    model = MLPClassifier(hidden_layer_sizes=(4,), max_iter=5, random_state=42)
+    model.fit(x_sel, y)
+    joblib.dump(vec, custom_p3a / "preprocessing" / "tfidf_vectorizer.joblib")
+    joblib.dump(selector, custom_p3a / "preprocessing" / "chi2_selector.joblib")
+    joblib.dump(model, custom_p3a / "mlp_model.joblib")
+
+    cfg = load_config()
+    verified_custom = verify_frozen_inputs(cfg, custom_p3a)
+    # Loaded successfully from a directory other than the historical default, with a model/
+    # vectorizer/selector that were fit (and pickled) entirely under the current environment.
+    assert verified_custom["paths"]["model"] == custom_p3a / "mlp_model.joblib"
+    assert hasattr(verified_custom["model"], "predict_proba")
+    assert verified_custom["selector"].get_support().sum() == 150
+
+

@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from src.phase3c import (EXPECTED_MANIFEST_SHA, EXPECTED_ASSIGNMENT_SHA, sha256_file,
                          assignment_hash, choose_neutral, guided_edits, random_edits,
-                         protected_paths)
+                         protected_paths, P3A_REL, P3B_REL)
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -13,6 +13,24 @@ def test_all_protected_artifacts_exist_and_manifest_hashes():
     assert all(x.exists() for x in p.values())
     assert sha256_file(p['manifest']) == EXPECTED_MANIFEST_SHA
     assert assignment_hash(pd.read_csv(p['manifest'])) == EXPECTED_ASSIGNMENT_SHA
+
+
+def test_protected_paths_defaults_to_historical_directories():
+    p = protected_paths()
+    assert p["model"] == ROOT / P3A_REL / "mlp_model.joblib"
+    assert p["selected_instances"] == ROOT / P3B_REL / "selected_test_instances.csv"
+
+
+def test_protected_paths_honors_explicit_phase3a_and_phase3b_dirs(tmp_path):
+    custom_p3a = tmp_path / "custom_phase3a_rerun"
+    custom_p3b = tmp_path / "custom_phase3b_rerun"
+    p = protected_paths(custom_p3a, custom_p3b)
+    assert p["model"] == custom_p3a / "mlp_model.joblib"
+    assert p["vectorizer"] == custom_p3a / "preprocessing/tfidf_vectorizer.joblib"
+    assert p["selected_instances"] == custom_p3b / "selected_test_instances.csv"
+    assert p["lime"] == custom_p3b / "lime_local_explanations.csv"
+    # Files/manifest paths that don't come from a Phase 3A/3B artifact directory are unaffected.
+    assert p["manifest"] == ROOT / "data/processed/trace_manifest.csv"
 
 def test_raw_window_perturbation_preserves_length_and_positions_unique():
     seq=np.array([1,2,3,4,5,6,7,8,9,10]*3,dtype=np.int64)

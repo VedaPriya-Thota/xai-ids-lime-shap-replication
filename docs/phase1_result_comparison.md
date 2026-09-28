@@ -2,7 +2,7 @@
 
 ## Scope
 
-This document compares the published study by Gaspar, Silva, and Silva (2024) with the frozen reconstruction in this repository. The comparison is deliberately conservative: values are reported as **paper-reported**, **derived**, or **reconstruction** values, and differences are not treated as evidence of an implementation error unless the underlying protocol is known to be identical.
+This document compares the published study by Gaspar, Silva, and Silva (2024) with the frozen reconstruction in this repository, as a required part of this replication deliverable. Values are reported as **paper-reported**, **derived**, or **reconstruction** values, and differences are not treated as evidence of an implementation error unless the underlying protocol is known to be identical. The comparison evaluates how closely the reconstructed methodology reproduces the reported experimental behavior; because the exact author-generated dataset and complete preprocessing/split protocol were not recovered, it is not a controlled performance comparison between two models, and it is not presented as exact numerical replication.
 
 > **Replication status:** this is a strict independent reconstruction using public raw ADFA-LD traces. The authors' generated 52,656-instance dataset and complete preprocessing/split procedure were not recovered. Therefore, this is **not an exact numerical replication** of the paper.
 
@@ -80,7 +80,18 @@ The reconstruction confusion matrix is therefore:
 | Normal | 11,681 | 432 |
 | Attack | 428 | 1,195 |
 
-The numerical values should **not** be interpreted as a direct reproduction of the paper's performance because the dataset size, class distribution, split protocol, framework, and some training details differ.
+### Confusion matrix comparison
+
+| Source | TP | FN | TN | FP | Total |
+|---|---:|---:|---:|---:|---:|
+| Paper | 24,038 | 2,832 | 25,311 | 475 | 52,656 |
+| Reconstruction (held-out test windows) | 1,195 | 428 | 11,681 | 432 | 13,736 |
+
+The paper's counts cover its full 52,656-instance dataset (no held-out test split was described in the pages read), while the reconstruction counts cover a 13,736-window held-out test split only, roughly four times smaller. Raw count differences such as TP 24,038 vs. 1,195 are therefore an expected consequence of the differing support size and evaluation basis, not evidence that one model performs better or worse than the other. Only within-support rates (accuracy, precision, recall/sensitivity, specificity, F1 — see the tables above) are meaningfully comparable, and even those describe different populations (the paper's full dataset vs. the reconstruction's held-out test windows).
+
+### How to read this comparison
+
+These reconstruction results are compared with the corresponding results reported by the paper, as required by the course's replication deliverable: the comparison assesses how closely the reconstructed methodology reproduces the reported experimental behavior. Because the exact author-generated dataset and complete preprocessing/split protocol were not recovered, this is **not a controlled performance comparison between two models** — observed numerical differences (dataset size, class distribution, split protocol, framework, and some training details) should be read as differences in reconstruction conditions, not as either model outperforming the other, and should not be interpreted as exact numerical replication.
 
 ## C. XAI comparison
 
@@ -122,7 +133,16 @@ Additional actionability statistics:
 
 These are **descriptive paired results on a 20-instance selected sample**. No statistical significance test was run. The intervention changes adjacent 2-grams around edited positions, so the procedure does not isolate one feature in a strictly causal sense. The results therefore measure model-output sensitivity under the documented intervention policy, not causal syscall importance.
 
-## E. Claims We Do Not Make
+## E. Main paper results reconstructed
+
+This project reconstructs or approximates the following main results from the paper:
+
+1. **Main classification result (paper Table 1 / confusion-matrix discussion, Sec. V.C).** Reconstructed as the frozen Phase 3A MLP classification result (Section B above), on the same task (binary normal/attack), the same instance representation (30-call windows), and the same feature pipeline (bigram TF-IDF, chi-square selection to 150 features).
+2. **LIME and Kernel SHAP top-10 explanatory-feature results (Sec. IV.A explainability discussion).** Reconstructed as the Phase 3B explanations on 20 deterministic frozen test windows (Section C above), using the same top-10-feature framing and, for SHAP, the same `KernelExplainer` method; LIME uses a documented vendored compatibility implementation because the official package was unavailable offline.
+
+Phase 3C (explanation-guided raw-sequence perturbation, Section D above) is an **additional reconstruction analysis**, not a claimed reproduction of the paper's perturbation experiments (Figs. 5–6). The paper's perturbation protocol removes or replaces features directly in the transformed feature space using class-exclusive/random feature sets; the reconstruction instead edits the raw 30-call syscall sequence with a documented neutral-replacement policy and a matched-random control. The intervention mechanism therefore differs from the paper's, so Phase 3C results are reported as evidence about the reconstructed model's sensitivity under this project's own intervention design, not as a reproduction of the paper's specific perturbation figures.
+
+## F. Claims We Do Not Make
 
 This project does **not** claim:
 

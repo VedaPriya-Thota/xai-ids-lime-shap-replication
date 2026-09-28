@@ -1,8 +1,10 @@
 """Phase 3B: frozen-model LIME and SHAP explanations.
 
-No Phase 3A artifact is written. The model and preprocessing are loaded read-only.
-The raw ADFA-LD mirror is read only to reconstruct train/test feature rows from the
-frozen manifest; no preprocessing transformer is fitted in this phase.
+No Phase 3A artifact is written. The model and preprocessing are loaded read-only from a Phase 3A
+artifact directory (the historical frozen directory by default, or an explicit `phase3a_dir`
+pointing at a Phase 3A run produced under the repository's documented environment). The raw
+ADFA-LD mirror is read only to reconstruct train/test feature rows from the frozen manifest; no
+preprocessing transformer is fitted in this phase.
 """
 from __future__ import annotations
 
@@ -17,7 +19,7 @@ import pandas as pd
 import shap
 import matplotlib.pyplot as plt
 
-from .config import PROJECT_ROOT, load_config, resolve_path
+from .config import PROJECT_ROOT, load_config, resolve_dir_or_default, resolve_path
 from .data import find_adfa_root, load_traces
 
 try:
@@ -163,10 +165,19 @@ def top_rows(method, selected, values, X, names):
     return pd.DataFrame(rows)
 
 
-def run_phase3b(raw_data_dir: str, nsamples: int=512, lime_num_samples: int=5000):
+def run_phase3b(raw_data_dir: str, nsamples: int=512, lime_num_samples: int=5000,
+                 phase3a_dir: str | Path | None=None, experiment_dir: str | Path | None=None):
+    """Run Phase 3B against a Phase 3A artifact directory.
+
+    `phase3a_dir` defaults to the historical frozen directory (`PHASE3A_DIR`) so the existing
+    default workflow is unchanged. Pass an explicit directory (e.g. a freshly regenerated Phase 3A
+    output produced under the repository's documented environment) to consume that artifact set
+    instead, without touching the frozen historical directory. `experiment_dir` likewise defaults
+    to the historical Phase 3B output location and can be overridden the same way.
+    """
     cfg=load_config("configs/baseline.yaml")
     random.seed(SEED); np.random.seed(SEED); os.environ["PYTHONHASHSEED"]=str(SEED)
-    p3a=PROJECT_ROOT/PHASE3A_DIR
+    p3a=resolve_dir_or_default(phase3a_dir, PHASE3A_DIR)
     verified=verify_frozen_inputs(cfg,p3a)
     manifest=verified["manifest"]
     root,texts,windows=reconstruct_windows(manifest,cfg,raw_data_dir)
@@ -175,7 +186,7 @@ def run_phase3b(raw_data_dir: str, nsamples: int=512, lime_num_samples: int=5000
     if x["train"].shape[1]!=150: raise RuntimeError("Final feature matrix is not 150 columns")
     test_pred=verified["predictions"]
     selected=select_instances(test_pred,windows[windows.split=="test"].reset_index(drop=True))
-    out=PROJECT_ROOT/EXP_DIR_NAME
+    out=resolve_dir_or_default(experiment_dir, EXP_DIR_NAME)
     if out.exists() and any(out.iterdir()): raise FileExistsError(f"Refusing to overwrite existing Phase 3B directory: {out}")
     (out/"figures").mkdir(parents=True)
     selected.to_csv(out/"selected_test_instances.csv",index=False)
@@ -270,7 +281,7 @@ def run_phase3b(raw_data_dir: str, nsamples: int=512, lime_num_samples: int=5000
     versions={"python":platform.python_version(),"numpy":np.__version__,"pandas":pd.__version__,"scikit_learn":__import__("sklearn").__version__,"joblib":joblib.__version__,"shap":shap.__version__,"lime":LIME_IMPORT_VERSION,"matplotlib":__import__("matplotlib").__version__}
     metadata={"phase":"3B","status":"sampled XAI reconstruction; not all test instances explained","paper_doi":"10.1109/ACCESS.2024.3368377",
               "generated_at_utc":datetime.now(timezone.utc).isoformat(),"seed":SEED,"manifest_sha256":verified["manifest_sha256"],"split_assignment_sha256":verified["assignment_sha256"],
-              "protected_input_hashes":verified["hashes"],"raw_source_dir":str(root),"raw_data_modified":False,
+              "protected_input_hashes":verified["hashes"],"phase3a_source_dir":rel(p3a),"raw_source_dir":str(root),"raw_data_modified":False,
               "selection":{"n_per_group":5,"total":20,"groups":["TP","FN","TN","FP"],"random_seed":42,"rule":"random sample from each frozen outcome group"},
               "shap":{"method":"KernelExplainer","background_total":len(background),"background_normal":int((bg_rows.label==0).sum()),"background_attack":int((bg_rows.label==1).sum()),"background_seed":42,"nsamples":nsamples,"l1_reg":"num_features(150)","expected_value_attack":attack_base},
               "lime":{"method":"lime.lime_tabular.LimeTabularExplainer","training_data":"full transformed TRAIN matrix (61,553 x 150)","num_features":10,"num_samples":lime_num_samples,"random_state":42,"discretize_continuous":False,"class_names":["normal","attack"],"explained_class":"attack_probability","kernel_width":"library/default compatibility value"},

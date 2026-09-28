@@ -33,6 +33,15 @@ def resolve_path(path: str | Path) -> Path:
     return p if p.is_absolute() else (PROJECT_ROOT / p)
 
 
+def resolve_dir_or_default(path: str | Path | None, default: str | Path) -> Path:
+    """Resolve an optional artifact-directory override, falling back to `default` when `path` is
+    None. Used by Phase 3B/3C so the default workflow keeps pointing at the historical frozen
+    artifact directories while callers can pass an explicit directory (e.g. a freshly regenerated
+    Phase 3A/3B output produced under the repository's documented environment) instead.
+    """
+    return resolve_path(path) if path is not None else resolve_path(default)
+
+
 def _normalize(cfg: dict[str, Any]) -> dict[str, Any]:
     cfg = copy.deepcopy(cfg)
     paths = cfg.get("paths", {})

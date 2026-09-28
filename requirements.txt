@@ -19,3 +19,5 @@ seaborn==0.13.2
 PyYAML==6.0.1
 joblib==1.4.2
 pytest==8.2.2
+# Required by pandas.DataFrame.to_markdown(), used by Phase 3C to write RESULTS.md.
+tabulate==0.10.0

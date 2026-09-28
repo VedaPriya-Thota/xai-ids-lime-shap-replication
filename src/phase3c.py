@@ -1,7 +1,10 @@
-"""Phase 3C: raw-sequence perturbation evaluation for frozen Phase 3A/3B artifacts.
+"""Phase 3C: raw-sequence perturbation evaluation for Phase 3A/3B artifacts.
 
 This module performs no fitting. It reconstructs raw 30-call windows, applies explanation-guided
-and matched random raw-position edits, then reuses only frozen TF-IDF/chi2/model artifacts.
+and matched random raw-position edits, then reuses only Phase 3A/3B TF-IDF/chi2/model/explanation
+artifacts loaded read-only from an artifact directory (the historical frozen directories by
+default, or explicit `phase3a_dir`/`phase3b_dir` pointing at runs produced under the repository's
+documented environment).
 """
 from __future__ import annotations
 
@@ -15,7 +18,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from .config import PROJECT_ROOT, load_config, resolve_path
+from .config import PROJECT_ROOT, load_config, resolve_dir_or_default, resolve_path
 from .data import find_adfa_root, load_traces
 
 SEED = 42
@@ -49,9 +52,9 @@ def rel(path: Path) -> str:
         return str(path.resolve())
 
 
-def protected_paths() -> dict[str, Path]:
-    p3a = PROJECT_ROOT / P3A_REL
-    p3b = PROJECT_ROOT / P3B_REL
+def protected_paths(p3a_dir: Path | None = None, p3b_dir: Path | None = None) -> dict[str, Path]:
+    p3a = resolve_dir_or_default(p3a_dir, P3A_REL)
+    p3b = resolve_dir_or_default(p3b_dir, P3B_REL)
     return {
         "baseline_config": PROJECT_ROOT / "configs/baseline.yaml",
         "manifest": PROJECT_ROOT / "data/processed/trace_manifest.csv",
@@ -69,8 +72,8 @@ def protected_paths() -> dict[str, Path]:
     }
 
 
-def verify_inputs() -> tuple[dict[str, Any], dict[str, str]]:
-    paths = protected_paths()
+def verify_inputs(p3a_dir: Path | None = None, p3b_dir: Path | None = None) -> tuple[dict[str, Any], dict[str, str]]:
+    paths = protected_paths(p3a_dir, p3b_dir)
     missing = [rel(p) for p in paths.values() if not p.exists()]
     if missing:
         raise FileNotFoundError(f"Protected Phase 3C inputs missing: {missing}")
@@ -215,11 +218,21 @@ def cascaded_changes(before: np.ndarray, after: np.ndarray, edited_positions: li
     return changed
 
 
-def run_phase3c(raw_data_dir: str | Path) -> Path:
+def run_phase3c(raw_data_dir: str | Path, phase3a_dir: str | Path | None = None,
+                 phase3b_dir: str | Path | None = None, experiment_dir: str | Path | None = None) -> Path:
+    """Run Phase 3C against Phase 3A/3B artifact directories.
+
+    `phase3a_dir`/`phase3b_dir` default to the historical frozen directories so the existing
+    default workflow is unchanged. Pass explicit directories (e.g. freshly regenerated Phase 3A/3B
+    outputs produced under the repository's documented environment) to consume those instead,
+    without touching the frozen historical directories. `experiment_dir` likewise defaults to the
+    historical Phase 3C output location and can be overridden the same way.
+    """
     cfg=load_config("configs/baseline.yaml")
     random.seed(SEED); np.random.seed(SEED); os.environ["PYTHONHASHSEED"]=str(SEED)
-    verified, before_hashes = verify_inputs()
-    out=PROJECT_ROOT/OUT_REL
+    p3a_resolved = resolve_dir_or_default(phase3a_dir, P3A_REL)
+    verified, before_hashes = verify_inputs(phase3a_dir, phase3b_dir)
+    out=resolve_dir_or_default(experiment_dir, OUT_REL)
     if out.exists() and any(out.iterdir()): raise FileExistsError(f"Refusing to overwrite existing Phase 3C directory: {out}")
     out.mkdir(parents=True); (out/"figures").mkdir()
     raw_windows=reconstruct_raw_windows(verified["manifest"],cfg,raw_data_dir)
@@ -293,9 +306,10 @@ def run_phase3c(raw_data_dir: str | Path) -> Path:
     for m in labels:
         g=group_summary[group_summary.method==m].set_index("outcome_group"); plt.bar([k+"/"+m for k in g.index],g.actionable_cases/g.n_instances)
     plt.ylabel("Actionable-case rate"); plt.xticks(rotation=45); plt.tight_layout(); plt.savefig(out/"figures/actionable_feature_rate.png",dpi=160); plt.close()
-    after={k:sha256_file(v) for k,v in protected_paths().items()}
+    after={k:sha256_file(v) for k,v in protected_paths(phase3a_dir, phase3b_dir).items()}
     if after != before_hashes: raise RuntimeError("Protected artifact hash changed during Phase 3C")
-    metadata={"phase":"3C","generated_at_utc":datetime.now(timezone.utc).isoformat(),"seed":SEED,"protected_hashes_before":before_hashes,"protected_hashes_after":after,"raw_data_modified":False,"model_fit":False,"preprocessing_fit":False,"explainer_fit":False,"balancing":False,"methods":["lime_compatible","shap_kernel"],"limitations":["sampled 20 test instances only","vendored LIME-compatible implementation from Phase 3B","perturbations are model-input interventions, not causal claims"],"software":{"python":platform.python_version(),"numpy":np.__version__,"pandas":pd.__version__,"joblib":joblib.__version__,"matplotlib":__import__('matplotlib').__version__}}
+    p3b_resolved = resolve_dir_or_default(phase3b_dir, P3B_REL)
+    metadata={"phase":"3C","generated_at_utc":datetime.now(timezone.utc).isoformat(),"seed":SEED,"protected_hashes_before":before_hashes,"protected_hashes_after":after,"raw_data_modified":False,"model_fit":False,"preprocessing_fit":False,"explainer_fit":False,"balancing":False,"methods":["lime_compatible","shap_kernel"],"limitations":["sampled 20 test instances only","vendored LIME-compatible implementation from Phase 3B","perturbations are model-input interventions, not causal claims"],"phase3a_source_dir":rel(p3a_resolved),"phase3b_source_dir":rel(p3b_resolved),"software":{"python":platform.python_version(),"numpy":np.__version__,"pandas":pd.__version__,"joblib":joblib.__version__,"matplotlib":__import__('matplotlib').__version__}}
     (out/"reproducibility_metadata.json").write_text(json.dumps(metadata,indent=2,sort_keys=True),encoding="utf-8")
     report=f'''# Phase 3C — Explanation-guided perturbation evaluation\n\nThis is a bounded perturbation evaluation of the frozen Phase 3A model using frozen Phase 3B explanations. It is not causal evidence about real attacks and is not an exact reproduction of the paper.\n\n- Frozen test sample: 20 instances (5 TP, 5 FN, 5 TN, 5 FP).\n- Raw representation: 30-call sequences; target features are adjacent syscall 2-grams.\n- Guided intervention: process top-10 explanation-ranked bigrams, replace the second syscall of each actionable pair using a training-only normal-frequency neutral policy; each raw position is edited at most once.\n- Random control: same number of edits, deterministic positions, same neutral policy.\n- Prediction: frozen Phase 3A TF-IDF, chi-square selector, and MLP only.\n\n## Limitations\nThe Phase 3B LIME results come from a vendored LIME-compatible implementation because the official package was unavailable in the offline runtime. The dataset is a strict reconstruction rather than the authors' exact 52,656-instance dataset. Results are descriptive only; no causal interpretation or significance claim is made.\n'''
     (out/"README.md").write_text(report,encoding="utf-8")
